@@ -55,14 +55,14 @@ class hotelManagementSystem:
         logout_btn=Button(btn_frame,text="LOGOUT",padx=10,width=16,bd=0,cursor='hand2',font=("times new roman",14,"bold"),bg='black',fg='gold',)
         logout_btn.grid(row=5,column=0,pady=1)
         
-        img4=Image.open("F:\Projects\hotelManagement\Images\slide3.jpg")
+        img4=Image.open("F:\Projects\hotelManagement\Images\myh.jpg")
         img4=img4.resize((200,145),Image.LANCZOS)
         self.photoimg4=ImageTk.PhotoImage(img4)
         
         img_label3=Label(btn_frame,image=self.photoimg4,bd=4,relief=RIDGE)
         img_label3.grid(row=6,column=0)
         
-        img5=Image.open("F:\Projects\hotelManagement\Images\slide3.jpg")
+        img5=Image.open("F:\Projects\hotelManagement\Images\myh.jpg")
         img5=img5.resize((200,145),Image.LANCZOS)
         self.photoimg5=ImageTk.PhotoImage(img5)
         
