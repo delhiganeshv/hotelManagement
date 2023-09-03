@@ -9,9 +9,9 @@ class CustomerWindow:
         
         
         #Title
-        lblTitle=Label(self.root,text="ADD CUSTOMER DETAILS",pady=7,font=("times new roman",18,"bold"),bg="black",fg='gold',bd=4,relief=RIDGE)
-        lblTitle.place(x=0,y=0,width=970,height=40)
-        #lblTitle.grid(row=0,column=1)
+        titleLabel=Label(self.root,text="ADD CUSTOMER DETAILS",pady=7,font=("times new roman",18,"bold"),bg="black",fg='gold',bd=4,relief=RIDGE)
+        titleLabel.place(x=0,y=0,width=970,height=40)
+        #titleLabel.grid(row=0,column=1)
 
         #LOGO
         img1=Image.open("F:\Projects\hotelManagement\Images\logohotel.png")
@@ -23,8 +23,8 @@ class CustomerWindow:
         #img_label.grid(row=0,column=0) 
         
         #labelFrame
-        labelFrameLeft=LabelFrame(self.root,bd=2,relief=RIDGE,text='Customer Details',font=('times new roman',12,"bold"),padx=2)
-        labelFrameLeft.place(x=5,y=40,width=400,height=465)
+        labelFrameLeft=LabelFrame(self.root,bd=2,relief=RIDGE,text='Customer Details',font=('arial',12,"bold"),padx=2)
+        labelFrameLeft.place(x=5,y=40,width=365,height=465)
         
         #labels and entries
         #customer Reference number
@@ -102,6 +102,80 @@ class CustomerWindow:
         
         addressEntry=Entry(labelFrameLeft,width=25,font=('times new roman',13,"bold"))
         addressEntry.grid(row=9,column=1)
+        
+        #buttons
+        
+        btnFrame=Frame(labelFrameLeft)
+        btnFrame.place(x=5,y=370,width=350,height=40)
+    
+        btnAdd=Button(btnFrame,text='Add',font=('arial',11,'bold'),bg='black',fg='gold',width=8)
+        btnAdd.grid(row=0,column=0,padx=3)
+        
+        btnUpdate=Button(btnFrame,text='Update',font=('arial',11,'bold'),bg='black',fg='gold',width=8)
+        btnUpdate.grid(row=0,column=1,padx=3)
+        
+        btnDelete=Button(btnFrame,text='Delete',font=('arial',11,'bold'),bg='black',fg='gold',width=8)
+        btnDelete.grid(row=0,column=2,padx=3)
+        
+        btnReset=Button(btnFrame,text='Reset',font=('arial',11,'bold'),bg='black',fg='gold',width=8)
+        btnReset.grid(row=0,column=3,padx=3)
+        
+        #table frame
+        
+        tableFrame=LabelFrame(self.root,bd=2,relief=RIDGE,text="View Details and Search System",font=('arial',12,'bold'),padx=2)
+        tableFrame.place(x=370,y=40,width=597,height=465)
+        
+        searchLabel=Label(tableFrame,font=('arial',11,'bold'),bg='red',fg='white',text='Search by:')
+        searchLabel.grid(row=0,column=0,sticky='w',padx=2)
+        
+        comboSearch=ttk.Combobox(tableFrame,font=('arial',12,'bold'),width=14,state='readonly')
+        comboSearch['value']=('select option','Mobile','Ref')
+        comboSearch.current(0)
+        comboSearch.grid(row=0,column=1,padx=2)
+        
+        textSearch=ttk.Entry(tableFrame,font=('arial',12,'bold'),width=20)
+        textSearch.grid(row=0,column=2,padx=2)
+        
+        btnSearch=Button(tableFrame,text='Search',font=('arial',11,'bold'),bg='black',fg='gold',width=7)
+        btnSearch.grid(row=0,column=4,padx=2)
+        
+        btnShowAll=Button(tableFrame,text='Show All',font=('arial',11,'bold'),bg='black',fg='gold',width=7)
+        btnShowAll.grid(row=0,column=5,padx=1)
+        
+        
+        #show data table
+        
+        detailTable=Frame(tableFrame,bd=2,relief=RIDGE)
+        detailTable.place(x=0,y=50,width=595,height=370)
+        
+        scrollX=ttk.Scrollbar(detailTable,orient=HORIZONTAL)
+        scrollY=ttk.Scrollbar(detailTable,orient=VERTICAL)
+        
+        self.customerDetail=ttk.Treeview(detailTable,column=('ref','name','gender','mobileNumber','Email','postcode','nationality','id','idNumber','address'),xscrollcommand=scrollX.set,yscrollcommand=scrollY.set)       #infor 
+        
+        scrollX.pack(side=BOTTOM,fill=X)
+        scrollY.pack(side=RIGHT,fill=Y)
+        
+        scrollX.config(command=self.customerDetail.xview)        
+        scrollY.config(command=self.customerDetail.yview)        
+        
+        self.customerDetail.heading('ref',text='Refer No')
+        self.customerDetail.heading('name',text='Name')
+        self.customerDetail.heading('gender',text='Gender')
+        self.customerDetail.heading('mobileNumber',text='Mobile')
+        self.customerDetail.heading('Email',text='Email')
+        self.customerDetail.heading('postcode',text='PostCode')
+        self.customerDetail.heading('id',text='Id Proof')
+        self.customerDetail.heading('nationality',text='Nationality')
+        self.customerDetail.heading('idNumber',text='Id Number')
+        self.customerDetail.heading('address',text='Address')
+        
+        self.customerDetail['show']='headings'
+        self.customerDetail.pack(fill=BOTH,expand=1)
+        
+        
+        
+        
         
 if __name__=="__main__":
     root=Tk()
