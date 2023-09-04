@@ -1,11 +1,32 @@
 from tkinter import *
 from PIL import Image,ImageTk
 from tkinter import ttk   #for  combobox
+from random import * 
+from tkinter import messagebox
+import mysql.connector
+
+
 class CustomerWindow:
     def __init__(self,root):
         self.root=root
         self.root.title("Hotel Management system")
         self.root.geometry("970x510+0+0")
+        
+        #variables
+        self.ref=StringVar()
+        self.ref.set(randint(1000,9999))
+        
+        self.name=StringVar()
+        self.gender=StringVar()
+        self.mobileNumber=StringVar()
+        self.email=StringVar()
+        self.postcode=StringVar()
+        self.nationality=StringVar()
+        self.id=StringVar()
+        self.idNumber=StringVar()
+        self.address=StringVar()
+        
+        
         
         
         #Title
@@ -31,21 +52,21 @@ class CustomerWindow:
         cust_ref_label=Label(labelFrameLeft,text="Customer Ref:",font=('times new roman',12,"bold"),padx=2,pady=6)
         cust_ref_label.grid(row=0,column=0,sticky='w')
         
-        cust_ref_entry=Entry(labelFrameLeft,width=25,font=('times new roman',13,"bold"))
+        cust_ref_entry=Entry(labelFrameLeft,textvariable=self.ref,state='readonly',width=25,font=('times new roman',13,"bold"))
         cust_ref_entry.grid(row=0,column=1)
         
         #customer Name
         customerNameLabel=Label(labelFrameLeft,text="Customer Name:",font=('times new roman',12,"bold"),padx=2,pady=6)
         customerNameLabel.grid(row=1,column=0,sticky='w')
         
-        customerNameEntry=Entry(labelFrameLeft,width=25,font=('times new roman',13,"bold"))
+        customerNameEntry=Entry(labelFrameLeft,textvariable=self.name,width=25,font=('times new roman',13,"bold"))
         customerNameEntry.grid(row=1,column=1)
         
         #Gender
         genderlabel=Label(labelFrameLeft,text="Gender:",font=('times new roman',12,"bold"),padx=2,pady=6)
         genderlabel.grid(row=2,column=0,sticky='w')
         
-        genderEntry=ttk.Combobox(labelFrameLeft,width=23,state="readonly",font=('times new roman',13,"bold"))
+        genderEntry=ttk.Combobox(labelFrameLeft,textvariable=self.gender,width=23,state="readonly",font=('times new roman',13,"bold"))
         genderEntry["value"]=["Male","Female","Other"]
         #genderEntry.current(0)  to set default value
         genderEntry.grid(row=2,column=1)
@@ -55,21 +76,21 @@ class CustomerWindow:
         phoneNumberLabel=Label(labelFrameLeft,text='Mobile No:',font=('times new roman',12,"bold"),padx=2,pady=6)
         phoneNumberLabel.grid(row=3,column=0,sticky='w')
         
-        phoneNumberEntry=Entry(labelFrameLeft,width=25,font=('times new roman',13,"bold"))
+        phoneNumberEntry=Entry(labelFrameLeft,textvariable=self.mobileNumber,width=25,font=('times new roman',13,"bold"))
         phoneNumberEntry.grid(row=3,column=1)
         
         #customer Email id
         emailIdlabel=Label(labelFrameLeft,text="Email Id:",font=('times new roman',12,"bold"),padx=2,pady=6)
         emailIdlabel.grid(row=4,column=0,sticky='w')
     
-        emailIdentry=Entry(labelFrameLeft,width=25,font=('times new roman',13,"bold"))
+        emailIdentry=Entry(labelFrameLeft,textvariable=self.email,width=25,font=('times new roman',13,"bold"))
         emailIdentry.grid(row=4,column=1)
         
         #customer postcode
         postcodeLabel=Label(labelFrameLeft,text="Postcode:",font=('times new roman',12,"bold"),padx=2,pady=6)
         postcodeLabel.grid(row=5,column=0,sticky='w')
         
-        postcodeEntry=Entry(labelFrameLeft,width=25,font=('times new roman',13,"bold"))
+        postcodeEntry=Entry(labelFrameLeft,textvariable=self.postcode,width=25,font=('times new roman',13,"bold"))
         postcodeEntry.grid(row=5,column=1)
         
         
@@ -77,7 +98,7 @@ class CustomerWindow:
         nationalityLabel=Label(labelFrameLeft,text="Nationality:",font=('times new roman',12,"bold"),padx=2,pady=6)
         nationalityLabel.grid(row=6,column=0,sticky='w')
         
-        nationalityEntry=ttk.Combobox(labelFrameLeft,width=23,state="readonly",font=('times new roman',13,"bold"))
+        nationalityEntry=ttk.Combobox(labelFrameLeft,textvariable=self.nationality,width=23,state="readonly",font=('times new roman',13,"bold"))
         nationalityEntry['value']=['Indian','American','British','Chinese','Japanese','Korean','Other']
         nationalityEntry.grid(row=6,column=1)
         
@@ -85,7 +106,7 @@ class CustomerWindow:
         idLabel=Label(labelFrameLeft,text="Id Proof Type:",font=('times new roman',12,"bold"),padx=2,pady=6)
         idLabel.grid(row=7,column=0,sticky='w')
         
-        idEntry=ttk.Combobox(labelFrameLeft,width=23,state="readonly",font=('times new roman',13,"bold"))
+        idEntry=ttk.Combobox(labelFrameLeft,textvariable=self.id,width=23,state="readonly",font=('times new roman',13,"bold"))
         idEntry['value']=['Aadhar','Pan',"Voter Id","Passport","Driving Licence"]
         idEntry.grid(row=7,column=1)
         
@@ -93,14 +114,14 @@ class CustomerWindow:
         idNumberLabel=Label(labelFrameLeft,text="Id Number:",font=('times new roman',12,"bold"),padx=2,pady=6)
         idNumberLabel.grid(row=8,column=0,sticky='w')
         
-        idNumberEntry=Entry(labelFrameLeft,width=25,font=('times new roman',13,"bold"))
+        idNumberEntry=Entry(labelFrameLeft,textvariable=self.idNumber,width=25,font=('times new roman',13,"bold"))
         idNumberEntry.grid(row=8,column=1)
         
         #customer Address
         addressLabel=Label(labelFrameLeft,text="Address:",font=('times new roman',12,"bold"),padx=2,pady=6)
         addressLabel.grid(row=9,column=0,sticky='w')
         
-        addressEntry=Entry(labelFrameLeft,width=25,font=('times new roman',13,"bold"))
+        addressEntry=Entry(labelFrameLeft,textvariable=self.address,width=25,font=('times new roman',13,"bold"))
         addressEntry.grid(row=9,column=1)
         
         #buttons
@@ -172,6 +193,13 @@ class CustomerWindow:
         
         self.customerDetail['show']='headings'
         self.customerDetail.pack(fill=BOTH,expand=1)
+        
+        
+        def addData:
+            if self.name.get()=='' or self.address.get()=="" or self.email.get()=="" or self.gender.get()=='' or self.nationality.get()=='':
+                messagebox.showerror("Error","All fields are required")
+            else:
+                mydb=mysql.connect(host="localhost",username='root',password="Ramana30@")
         
         
         
