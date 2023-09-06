@@ -1,9 +1,13 @@
 from tkinter import *
 from PIL import Image,ImageTk
 from tkinter import ttk   #for  combobox
-from random import * 
+from random import *
 from tkinter import messagebox
-import mysql.connector
+from customerDB import Database
+
+db=Database("Customer.db") 
+
+
 
 
 class CustomerWindow:
@@ -14,7 +18,7 @@ class CustomerWindow:
         
         #variables
         self.ref=StringVar()
-        self.ref.set(randint(1000,9999))
+        self.ref.set(str(randint(1000,9999)))
         
         self.name=StringVar()
         self.gender=StringVar()
@@ -52,7 +56,7 @@ class CustomerWindow:
         cust_ref_label=Label(labelFrameLeft,text="Customer Ref:",font=('times new roman',12,"bold"),padx=2,pady=6)
         cust_ref_label.grid(row=0,column=0,sticky='w')
         
-        cust_ref_entry=Entry(labelFrameLeft,textvariable=self.ref,state='readonly',width=25,font=('times new roman',13,"bold"))
+        cust_ref_entry=Entry(labelFrameLeft,state='readonly',textvariable=self.ref,width=25,font=('times new roman',13,"bold"))
         cust_ref_entry.grid(row=0,column=1)
         
         #customer Name
@@ -129,16 +133,16 @@ class CustomerWindow:
         btnFrame=Frame(labelFrameLeft)
         btnFrame.place(x=5,y=370,width=350,height=40)
     
-        btnAdd=Button(btnFrame,text='Add',font=('arial',11,'bold'),bg='black',fg='gold',width=8)
+        btnAdd=Button(btnFrame,text='Add',command=self.addData,font=('arial',11,'bold'),bg='black',fg='gold',width=8)
         btnAdd.grid(row=0,column=0,padx=3)
         
-        btnUpdate=Button(btnFrame,text='Update',font=('arial',11,'bold'),bg='black',fg='gold',width=8)
+        btnUpdate=Button(btnFrame,text='Update',command=self.update,font=('arial',11,'bold'),bg='black',fg='gold',width=8)
         btnUpdate.grid(row=0,column=1,padx=3)
         
-        btnDelete=Button(btnFrame,text='Delete',font=('arial',11,'bold'),bg='black',fg='gold',width=8)
+        btnDelete=Button(btnFrame,text='Delete',command=self.delete,font=('arial',11,'bold'),bg='black',fg='gold',width=8)
         btnDelete.grid(row=0,column=2,padx=3)
         
-        btnReset=Button(btnFrame,text='Reset',font=('arial',11,'bold'),bg='black',fg='gold',width=8)
+        btnReset=Button(btnFrame,command=self.reset,text='Reset',font=('arial',11,'bold'),bg='black',fg='gold',width=8)
         btnReset.grid(row=0,column=3,padx=3)
         
         #table frame
@@ -192,20 +196,83 @@ class CustomerWindow:
         self.customerDetail.heading('address',text='Address')
         
         self.customerDetail['show']='headings'
+        self.customerDetail.bind("<ButtonRelease-1>", self.getData)
         self.customerDetail.pack(fill=BOTH,expand=1)
         
-        
-        def addData:
-            if self.name.get()=='' or self.address.get()=="" or self.email.get()=="" or self.gender.get()=='' or self.nationality.get()=='':
+            
+    def addData(self):
+            if self.name.get()=='' or self.address.get()=="" or self.mobileNumber.get()=="" or self.email.get()=="" or self.gender.get()=='' or self.nationality.get()=='' or self.id.get()=="" or self.idNumber.get()=="" or self.postcode.get()=="":
                 messagebox.showerror("Error","All fields are required")
             else:
-                mydb=mysql.connect(host="localhost",username='root',password="Ramana30@")
+                #mydb=mysql.connector.connect(host="localhost",username='root',password="Ramana30@")
+                try:
+                    db.insert(self.ref.get(),self.name.get(),self.gender.get(),self.mobileNumber.get(),self.email.get(),self.postcode.get(),self.nationality.get(),self.id.get(),self.idNumber.get(),self.address.get())
+                    messagebox.showinfo("Success","Customer has been added")
+                    self.displayAll()
+                except Exception as es:
+                    messagebox.showerror("Warning",f"Some thing went wrong:{str(es)}",parent=self.root)
+                        
+    def getData(self,event=''):
+        selected_row = self.customerDetail.focus()
+        data = self.customerDetail.item(selected_row)
+        global row
+        row = data["values"]
+        # print(row)
+        self.ref.set(row[0])
+        self.name.set(row[1])
+        self.gender.set(row[2])
+        self.mobileNumber.set(row[3])
+        self.email.set(row[4])
+        self.postcode.set(row[5])
+        self.nationality.set(row[6])
+        self.id.set(row[7])
+        self.idNumber.set(row[8])
+        self.address.set(row[9])
         
+
+
+    def displayAll(self):
+        """if i call the display function multiple times it will shows the same datas
+        multiple times to aviod these the below line is used which clear the displaying
+        data if displayall is called again"""
+        rows=db.fetch()
+        if len(rows)!=0:
+            self.customerDetail.delete(*self.customerDetail.get_children())
+            for row in rows:
+                self.customerDetail.insert("", END, values=row)
+
+    def update(self):
+            if self.name.get()=='' or self.address.get()=="" or self.mobileNumber.get()=="" or self.email.get()=="" or self.gender.get()=='' or self.nationality.get()=='' or self.id.get()=="" or self.idNumber.get()=="" or self.postcode.get()=="":
+                messagebox.showerror("Error","All fields are required")
+            else:
+                #mydb=mysql.connector.connect(host="localhost",username='root',password="Ramana30@")
+                try:
+                    db.update(self.ref.get(),self.name.get(),self.gender.get(),self.mobileNumber.get(),self.email.get(),self.postcode.get(),self.nationality.get(),self.id.get(),self.idNumber.get(),self.address.get())
+                    messagebox.showinfo("Success","Customer Detail has been updated")
+                    self.displayAll()
+                except Exception as es:
+                    messagebox.showerror("Warning",f"Some thing went wrong:{str(es)}",parent=self.root)
+                    
+    def delete(self):
+        delete=messagebox.askyesno("Hotel Management System","Do you want to delete this Customer",parent=self.root)
+        if delete>0:
+            db.remove(self.ref.get())
+        self.displayAll()
         
-        
-        
-        
+    def reset(self):
+       # self.ref.set("")
+        self.name.set("")
+        self.gender.set("")
+        self.mobileNumber.set("")
+        self.email.set("")
+        self.postcode.set("")
+      #  self.nationality.set("")
+      #  self.id.set("")
+        self.idNumber.set("")
+        self.address.set("")
+        self.ref.set(str(randint(1000,9999)))
 if __name__=="__main__":
     root=Tk()
     obj=CustomerWindow(root)
+    obj.displayAll()
     root.mainloop()
