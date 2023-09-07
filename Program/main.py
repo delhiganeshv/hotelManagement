@@ -1,5 +1,6 @@
 from tkinter import*
 from PIL import Image,ImageTk   #pip install pillow
+from customer import CustomerWindow
 
 class hotelManagementSystem:
     def __init__(self,root):
@@ -40,7 +41,7 @@ class hotelManagementSystem:
         label_menu=Label(btn_frame,text='MENU',width=12,font=("times new roman",20,"bold"),bg='black',fg='gold',bd=4,relief=RIDGE)
         label_menu.grid(row=0,column=0,pady=2)
         
-        cust_btn=Button(btn_frame,text="CUSTOMER",padx=10,width=16,bd=0,cursor='hand2',font=("times new roman",14,"bold"),bg='black',fg='gold',)
+        cust_btn=Button(btn_frame,text="CUSTOMER",command=self.customer_detail,padx=10,width=16,bd=0,cursor='hand2',font=("times new roman",14,"bold"),bg='black',fg='gold',)
         cust_btn.grid(row=1,column=0,pady=1)
         
         room_btn=Button(btn_frame,text="ROOM",padx=10,width=16,bd=0,cursor='hand2',font=("times new roman",14,"bold"),bg='black',fg='gold',)
@@ -79,7 +80,14 @@ class hotelManagementSystem:
         img_label2.grid(row=0,column=1)
         
 
-        
+    def customer_detail(self):
+        # x=self.root.winfo_x()
+        # y=self.root.winfo_y()
+        self.newWindow=Toplevel(self.root)
+        self.app=CustomerWindow(self.newWindow)
+        self.app.displayAll()
+        self.newWindow.geometry("+%d+%d" % (232,188)) 
+          
 if __name__=="__main__":
     root=Tk()
     obj=hotelManagementSystem(root)

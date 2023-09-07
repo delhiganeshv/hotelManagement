@@ -47,5 +47,13 @@ class Database:
         self.cur.execute(
             sql, (name,gender,mobile,email,postcode,nationality,id,idNumber,address,ref))
         self.con.commit()
-
+        
+    # search a record
+    
+    def search(self, searchVal,searchText):
+        sql = "select * from Customer where "+str(searchVal)+" LIKE '%"+str(searchText)+"%'"
+        self.cur.execute(sql)
+        rows = self.cur.fetchall()
+        return rows
+    
         

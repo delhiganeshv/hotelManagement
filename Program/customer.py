@@ -13,8 +13,9 @@ db=Database("Customer.db")
 class CustomerWindow:
     def __init__(self,root):
         self.root=root
-        self.root.title("Hotel Management system")
-        self.root.geometry("970x510+0+0")
+      #  self.root.title("Hotel Management system")
+        self.root.geometry("970x540+0+0")
+        self.root.overrideredirect(True)
         
         #variables
         self.ref=StringVar()
@@ -29,6 +30,8 @@ class CustomerWindow:
         self.id=StringVar()
         self.idNumber=StringVar()
         self.address=StringVar()
+        self.searchVal=StringVar()
+        self.searchText=StringVar()
         
         
         
@@ -72,6 +75,7 @@ class CustomerWindow:
         
         genderEntry=ttk.Combobox(labelFrameLeft,textvariable=self.gender,width=23,state="readonly",font=('times new roman',13,"bold"))
         genderEntry["value"]=["Male","Female","Other"]
+        genderEntry.current(0)
         #genderEntry.current(0)  to set default value
         genderEntry.grid(row=2,column=1)
         
@@ -104,6 +108,7 @@ class CustomerWindow:
         
         nationalityEntry=ttk.Combobox(labelFrameLeft,textvariable=self.nationality,width=23,state="readonly",font=('times new roman',13,"bold"))
         nationalityEntry['value']=['Indian','American','British','Chinese','Japanese','Korean','Other']
+        nationalityEntry.current(0)
         nationalityEntry.grid(row=6,column=1)
         
         #customer Id Proof
@@ -112,6 +117,7 @@ class CustomerWindow:
         
         idEntry=ttk.Combobox(labelFrameLeft,textvariable=self.id,width=23,state="readonly",font=('times new roman',13,"bold"))
         idEntry['value']=['Aadhar','Pan',"Voter Id","Passport","Driving Licence"]
+        idEntry.current(0)
         idEntry.grid(row=7,column=1)
         
         #customer Id proof number
@@ -153,18 +159,18 @@ class CustomerWindow:
         searchLabel=Label(tableFrame,font=('arial',11,'bold'),bg='red',fg='white',text='Search by:')
         searchLabel.grid(row=0,column=0,sticky='w',padx=2)
         
-        comboSearch=ttk.Combobox(tableFrame,font=('arial',12,'bold'),width=14,state='readonly')
+        comboSearch=ttk.Combobox(tableFrame,textvariable=self.searchVal,font=('arial',12,'bold'),width=14,state='readonly')
         comboSearch['value']=('select option','Mobile','Ref')
         comboSearch.current(0)
         comboSearch.grid(row=0,column=1,padx=2)
         
-        textSearch=ttk.Entry(tableFrame,font=('arial',12,'bold'),width=20)
+        textSearch=ttk.Entry(tableFrame,textvariable=self.searchText,font=('arial',12,'bold'),width=20)
         textSearch.grid(row=0,column=2,padx=2)
         
-        btnSearch=Button(tableFrame,text='Search',font=('arial',11,'bold'),bg='black',fg='gold',width=7)
+        btnSearch=Button(tableFrame,text='Search',command=self.searchCustomer,font=('arial',11,'bold'),bg='black',fg='gold',width=7)
         btnSearch.grid(row=0,column=4,padx=2)
         
-        btnShowAll=Button(tableFrame,text='Show All',font=('arial',11,'bold'),bg='black',fg='gold',width=7)
+        btnShowAll=Button(tableFrame,command=self.displayAll,text='Show All',font=('arial',11,'bold'),bg='black',fg='gold',width=7)
         btnShowAll.grid(row=0,column=5,padx=1)
         
         
@@ -209,6 +215,7 @@ class CustomerWindow:
                     db.insert(self.ref.get(),self.name.get(),self.gender.get(),self.mobileNumber.get(),self.email.get(),self.postcode.get(),self.nationality.get(),self.id.get(),self.idNumber.get(),self.address.get())
                     messagebox.showinfo("Success","Customer has been added")
                     self.displayAll()
+                    self.reset()
                 except Exception as es:
                     messagebox.showerror("Warning",f"Some thing went wrong:{str(es)}",parent=self.root)
                         
@@ -250,15 +257,22 @@ class CustomerWindow:
                     db.update(self.ref.get(),self.name.get(),self.gender.get(),self.mobileNumber.get(),self.email.get(),self.postcode.get(),self.nationality.get(),self.id.get(),self.idNumber.get(),self.address.get())
                     messagebox.showinfo("Success","Customer Detail has been updated")
                     self.displayAll()
+                    self.reset()
                 except Exception as es:
                     messagebox.showerror("Warning",f"Some thing went wrong:{str(es)}",parent=self.root)
-                    
+
     def delete(self):
-        delete=messagebox.askyesno("Hotel Management System","Do you want to delete this Customer",parent=self.root)
-        if delete>0:
-            db.remove(self.ref.get())
-        self.displayAll()
+        if self.ref.get()=="":
+            messagebox.showerror("Error","Customer Ref is required")
+        else:
+            try:
+                db.remove(self.ref.get())
+                messagebox.showinfo("Success","Customer Detail has been deleted")
+                self.displayAll()
+            except Exception as es:
+                messagebox.showerror("Warning",f"Some thing went wrong:{str(es)}",parent=self.root)
         
+    
     def reset(self):
        # self.ref.set("")
         self.name.set("")
@@ -271,6 +285,22 @@ class CustomerWindow:
         self.idNumber.set("")
         self.address.set("")
         self.ref.set(str(randint(1000,9999)))
+    
+    def searchCustomer(self):
+        if self.searchVal.get()=="" or self.searchText.get()=="":
+            messagebox.showerror("Error","All fields are required")
+        else:
+            try:
+                rows=db.search(self.searchVal.get(),self.searchText.get())
+                if len(rows)!=0:
+                    self.customerDetail.delete(*self.customerDetail.get_children())
+                    for row in rows:
+                        self.customerDetail.insert("", END, values=row)
+                else:
+                    messagebox.showerror("Error","No such data found")
+            except Exception as es:
+                messagebox.showerror("Error",f"Some thing went wrong:{str(es)}",parent=self.root)
+        
 if __name__=="__main__":
     root=Tk()
     obj=CustomerWindow(root)
