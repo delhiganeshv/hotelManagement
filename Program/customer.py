@@ -3,9 +3,9 @@ from PIL import Image,ImageTk
 from tkinter import ttk   #for  combobox
 from random import *
 from tkinter import messagebox
-from customerDB import Database
+from customerDB import customerDatabase
 
-db=Database("Customer.db") 
+db=customerDatabase("Customer.db") 
 
 
 
@@ -75,8 +75,7 @@ class CustomerWindow:
         
         genderEntry=ttk.Combobox(labelFrameLeft,textvariable=self.gender,width=23,state="readonly",font=('times new roman',13,"bold"))
         genderEntry["value"]=["Male","Female","Other"]
-        genderEntry.current(0)
-        #genderEntry.current(0)  to set default value
+        genderEntry.current(0)  #to set default value
         genderEntry.grid(row=2,column=1)
         
         
@@ -208,12 +207,12 @@ class CustomerWindow:
             
     def addData(self):
             if self.name.get()=='' or self.address.get()=="" or self.mobileNumber.get()=="" or self.email.get()=="" or self.gender.get()=='' or self.nationality.get()=='' or self.id.get()=="" or self.idNumber.get()=="" or self.postcode.get()=="":
-                messagebox.showerror("Error","All fields are required")
+                messagebox.showerror("Error","All fields are required",parent=self.root)
             else:
                 #mydb=mysql.connector.connect(host="localhost",username='root',password="Ramana30@")
                 try:
                     db.insert(self.ref.get(),self.name.get(),self.gender.get(),self.mobileNumber.get(),self.email.get(),self.postcode.get(),self.nationality.get(),self.id.get(),self.idNumber.get(),self.address.get())
-                    messagebox.showinfo("Success","Customer has been added")
+                    messagebox.showinfo("Success","Customer has been added",parent=self.root)
                     self.displayAll()
                     self.reset()
                 except Exception as es:
@@ -250,12 +249,12 @@ class CustomerWindow:
 
     def update(self):
             if self.name.get()=='' or self.address.get()=="" or self.mobileNumber.get()=="" or self.email.get()=="" or self.gender.get()=='' or self.nationality.get()=='' or self.id.get()=="" or self.idNumber.get()=="" or self.postcode.get()=="":
-                messagebox.showerror("Error","All fields are required")
+                messagebox.showerror("Error","All fields are required",parent=self.root)
             else:
                 #mydb=mysql.connector.connect(host="localhost",username='root',password="Ramana30@")
                 try:
                     db.update(self.ref.get(),self.name.get(),self.gender.get(),self.mobileNumber.get(),self.email.get(),self.postcode.get(),self.nationality.get(),self.id.get(),self.idNumber.get(),self.address.get())
-                    messagebox.showinfo("Success","Customer Detail has been updated")
+                    messagebox.showinfo("Success","Customer Detail has been updated",parent=self.root)
                     self.displayAll()
                     self.reset()
                 except Exception as es:
@@ -263,12 +262,14 @@ class CustomerWindow:
 
     def delete(self):
         if self.ref.get()=="":
-            messagebox.showerror("Error","Customer Ref is required")
+            messagebox.showerror("Error","Customer Ref is required",parent=self.root)
         else:
             try:
-                db.remove(self.ref.get())
-                messagebox.showinfo("Success","Customer Detail has been deleted")
-                self.displayAll()
+                ask=messagebox.askyesno("Confirm","Do you want to delete this customer?",parent=self.root)
+                if ask>0:
+                    db.remove(self.ref.get())
+                    messagebox.showinfo("Success","Customer Detail has been deleted",parent=self.root)
+                    self.displayAll()
             except Exception as es:
                 messagebox.showerror("Warning",f"Some thing went wrong:{str(es)}",parent=self.root)
         
@@ -288,7 +289,7 @@ class CustomerWindow:
     
     def searchCustomer(self):
         if self.searchVal.get()=="" or self.searchText.get()=="":
-            messagebox.showerror("Error","All fields are required")
+            messagebox.showerror("Error","All fields are required",parent=self.root)
         else:
             try:
                 rows=db.search(self.searchVal.get(),self.searchText.get())
@@ -297,12 +298,12 @@ class CustomerWindow:
                     for row in rows:
                         self.customerDetail.insert("", END, values=row)
                 else:
-                    messagebox.showerror("Error","No such data found")
+                    messagebox.showerror("Error","No such data found",parent=self.root)
             except Exception as es:
                 messagebox.showerror("Error",f"Some thing went wrong:{str(es)}",parent=self.root)
-        
+'''     
 if __name__=="__main__":
     root=Tk()
     obj=CustomerWindow(root)
     obj.displayAll()
-    root.mainloop()
+    root.mainloop()'''

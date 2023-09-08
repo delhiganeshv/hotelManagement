@@ -1,7 +1,7 @@
 #import mysql.connector
 import sqlite3
 
-class Database:
+class customerDatabase:
     def __init__(self,db):
        # self.con=mysql.connector.connect(host="localhost",user='root',password="Ramana30@")
         self.con = sqlite3.connect(db)

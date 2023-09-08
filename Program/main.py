@@ -87,6 +87,7 @@ class hotelManagementSystem:
         self.app=CustomerWindow(self.newWindow)
         self.app.displayAll()
         self.newWindow.geometry("+%d+%d" % (232,188)) 
+        self.newWindow.grab_set()
           
 if __name__=="__main__":
     root=Tk()
