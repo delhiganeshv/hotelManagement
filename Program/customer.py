@@ -3,7 +3,7 @@ from PIL import Image,ImageTk
 from tkinter import ttk   #for  combobox
 from random import *
 from tkinter import messagebox
-from customerDB import customerDatabase
+from database import customerDatabase
 
 db=customerDatabase("Customer.db") 
 
@@ -138,16 +138,16 @@ class CustomerWindow:
         btnFrame=Frame(labelFrameLeft)
         btnFrame.place(x=5,y=370,width=350,height=40)
     
-        btnAdd=Button(btnFrame,text='Add',command=self.addData,font=('arial',11,'bold'),bg='black',fg='gold',width=8)
+        btnAdd=Button(btnFrame,text='Add',cursor='hand2',command=self.addData,font=('arial',11,'bold'),bg='black',fg='gold',width=8)
         btnAdd.grid(row=0,column=0,padx=3)
         
-        btnUpdate=Button(btnFrame,text='Update',command=self.update,font=('arial',11,'bold'),bg='black',fg='gold',width=8)
+        btnUpdate=Button(btnFrame,text='Update',cursor='hand2',command=self.update,font=('arial',11,'bold'),bg='black',fg='gold',width=8)
         btnUpdate.grid(row=0,column=1,padx=3)
         
-        btnDelete=Button(btnFrame,text='Delete',command=self.delete,font=('arial',11,'bold'),bg='black',fg='gold',width=8)
+        btnDelete=Button(btnFrame,text='Delete',cursor='hand2',command=self.delete,font=('arial',11,'bold'),bg='black',fg='gold',width=8)
         btnDelete.grid(row=0,column=2,padx=3)
         
-        btnReset=Button(btnFrame,command=self.reset,text='Reset',font=('arial',11,'bold'),bg='black',fg='gold',width=8)
+        btnReset=Button(btnFrame,cursor='hand2',command=self.reset,text='Reset',font=('arial',11,'bold'),bg='black',fg='gold',width=8)
         btnReset.grid(row=0,column=3,padx=3)
         
         #table frame
@@ -166,10 +166,10 @@ class CustomerWindow:
         textSearch=ttk.Entry(tableFrame,textvariable=self.searchText,font=('arial',12,'bold'),width=20)
         textSearch.grid(row=0,column=2,padx=2)
         
-        btnSearch=Button(tableFrame,text='Search',command=self.searchCustomer,font=('arial',11,'bold'),bg='black',fg='gold',width=7)
+        btnSearch=Button(tableFrame,cursor='hand2',text='Search',command=self.searchCustomer,font=('arial',11,'bold'),bg='black',fg='gold',width=7)
         btnSearch.grid(row=0,column=4,padx=2)
         
-        btnShowAll=Button(tableFrame,command=self.displayAll,text='Show All',font=('arial',11,'bold'),bg='black',fg='gold',width=7)
+        btnShowAll=Button(tableFrame,cursor='hand2',command=self.displayAll,text='Show All',font=('arial',11,'bold'),bg='black',fg='gold',width=7)
         btnShowAll.grid(row=0,column=5,padx=1)
         
         
@@ -301,9 +301,9 @@ class CustomerWindow:
                     messagebox.showerror("Error","No such data found",parent=self.root)
             except Exception as es:
                 messagebox.showerror("Error",f"Some thing went wrong:{str(es)}",parent=self.root)
-'''     
+  
 if __name__=="__main__":
     root=Tk()
     obj=CustomerWindow(root)
     obj.displayAll()
-    root.mainloop()'''
+    root.mainloop()
