@@ -1,6 +1,7 @@
 from tkinter import*
 from PIL import Image,ImageTk   #pip install pillow
 from customer import CustomerWindow
+from room import RoomBooking
 
 class hotelManagementSystem:
     def __init__(self,root):
@@ -44,7 +45,7 @@ class hotelManagementSystem:
         cust_btn=Button(btn_frame,text="CUSTOMER",command=self.customer_detail,padx=10,width=16,bd=0,cursor='hand2',font=("times new roman",14,"bold"),bg='black',fg='gold',)
         cust_btn.grid(row=1,column=0,pady=1)
         
-        room_btn=Button(btn_frame,text="ROOM",padx=10,width=16,bd=0,cursor='hand2',font=("times new roman",14,"bold"),bg='black',fg='gold',)
+        room_btn=Button(btn_frame,text="ROOM",command=self.room_detail,padx=10,width=16,bd=0,cursor='hand2',font=("times new roman",14,"bold"),bg='black',fg='gold',)
         room_btn.grid(row=2,column=0,pady=1)
         
         detail_btn=Button(btn_frame,text="DETAIL",padx=10,width=16,bd=0,cursor='hand2',font=("times new roman",14,"bold"),bg='black',fg='gold',)
@@ -87,7 +88,14 @@ class hotelManagementSystem:
         self.app=CustomerWindow(self.newWindow)
         self.app.displayAll()
         self.newWindow.geometry("+%d+%d" % (232,188)) 
-        self.newWindow.grab_set()
+        #self.newWindow.grab_set()
+        
+    def room_detail(self):
+        self.newWindow=Toplevel(self.root)
+        self.app=RoomBooking(self.newWindow)
+        self.app.displayAll()
+        self.newWindow.geometry("+%d+%d" % (232,188)) 
+        #self.newWindow.grab_set()
           
 if __name__=="__main__":
     root=Tk()

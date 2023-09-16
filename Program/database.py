@@ -39,6 +39,7 @@ class customerDatabase:
     def remove(self, ref):
         # for tupple if single element put comma after element
         self.cur.execute("delete from Customer where ref=?", (ref,))
+        self.con.commit()
 
     # update a record
     def update(self,ref,name,gender,mobile,email,postcode,nationality,id,idNumber,address):
@@ -100,6 +101,7 @@ class roomDatabase:
     def remove(self, contact):
         # for tupple if single element put comma after element
         self.cur.execute("delete from Room where contact=?", (contact,))
+        self.con.commit()
 
     # update a record
     def update(self,contact,checkIn,checkOut,roomType,RoomAvailable,meal,noOfDays):

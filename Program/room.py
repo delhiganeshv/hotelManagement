@@ -5,6 +5,8 @@ import random
 from tkinter import ttk
 from database import *
 from tkcalendar import DateEntry
+from datetime import datetime
+
 
 customerDB=customerDatabase("Customer.db") 
 roomDB=roomDatabase("Room.db")
@@ -14,9 +16,9 @@ class RoomBooking:
    
   def __init__(self,root):
     self.root=root
-    self.root.title("Hotel Management system")
+    #self.root.title("Hotel Management system")
     self.root.geometry("970x540+0+0")
-    #  self.root.overrideredirect(True)
+    self.root.overrideredirect(True)
     
     #variables
     self.contact=StringVar()
@@ -101,9 +103,14 @@ class RoomBooking:
     #Meal
     meallabel=Label(labelFrameLeft,text="Meal:",font=('times new roman',12,"bold"),padx=2,pady=6)
     meallabel.grid(row=5,column=0,sticky='w')
+    
+    mealEntry=ttk.Combobox(labelFrameLeft,textvariable=self.meal,width=21,state="readonly",font=('times new roman',13,"bold"))
+    mealEntry["value"]=["None","Breakfast","Lunch","Dinner"]
+    mealEntry.current(0)  #to set default value
+    mealEntry.grid(row=5,column=1,sticky='w')
 
-    mealentry=Entry(labelFrameLeft,textvariable=self.meal,width=23,font=('times new roman',13,"bold"))
-    mealentry.grid(row=5,column=1,sticky='w')
+    # mealentry=Entry(labelFrameLeft,textvariable=self.meal,width=23,font=('times new roman',13,"bold"))
+    # mealentry.grid(row=5,column=1,sticky='w')
     
     #No of days
     NoOfDaysLabel=Label(labelFrameLeft,text="No of Days:",font=('times new roman',12,"bold"),padx=2,pady=6)
@@ -118,26 +125,26 @@ class RoomBooking:
     paidTaxLabel=Label(labelFrameLeft,text="Paid Tax:",font=('times new roman',12,"bold"),padx=2,pady=6)
     paidTaxLabel.grid(row=7,column=0,sticky='w')
     
-    paidTaxEntry=Entry(labelFrameLeft,textvariable=self.paidTax,width=23,font=('times new roman',13,"bold"))
+    paidTaxEntry=Entry(labelFrameLeft,state='readonly',textvariable=self.paidTax,width=23,font=('times new roman',13,"bold"))
     paidTaxEntry.grid(row=7,column=1,sticky='w')
     
     #sub Total       
   
-    subTotalLabel=Label(labelFrameLeft,text="Paid Tax:",font=('times new roman',12,"bold"),padx=2,pady=6)
+    subTotalLabel=Label(labelFrameLeft,text="Actual Total:",font=('times new roman',12,"bold"),padx=2,pady=6)
     subTotalLabel.grid(row=8,column=0,sticky='w')
     
-    subTotalEntry=Entry(labelFrameLeft,textvariable=self.subTotal,width=23,font=('times new roman',13,"bold"))
+    subTotalEntry=Entry(labelFrameLeft,state='readonly',textvariable=self.subTotal,width=23,font=('times new roman',13,"bold"))
     subTotalEntry.grid(row=8,column=1,sticky='w')
     
     #Total Cost
     totalCostLabel=Label(labelFrameLeft,text="Total Cost:",font=('times new roman',12,"bold"),padx=2,pady=6)
     totalCostLabel.grid(row=9,column=0,sticky='w')
     
-    totalCostEntry=Entry(labelFrameLeft,textvariable=self.totalCost,width=23,font=('times new roman',13,"bold"))
+    totalCostEntry=Entry(labelFrameLeft,state='readonly',textvariable=self.totalCost,width=23,font=('times new roman',13,"bold"))
     totalCostEntry.grid(row=9,column=1,sticky='w')
     
     #bill button
-    bill_button=Button(labelFrameLeft,cursor='hand2',text="Bill",width=37,font=('times new roman',12,"bold"),bg='black',fg='gold')
+    bill_button=Button(labelFrameLeft,command=self.totalBill,cursor='hand2',text="Bill",width=37,font=('times new roman',12,"bold"),bg='black',fg='gold')
     bill_button.grid(row=10,column=0,pady=10,columnspan=2,sticky='w')
     
     #Add,delete,update and reset buttons in a single row
@@ -232,41 +239,41 @@ class RoomBooking:
         showDataFrame=Frame(self.root,bd=4,relief=RIDGE,padx=2)
         showDataFrame.place(x=375,y=45,width=320,height=200)
         
-        lblName=Label(showDataFrame,text="Name          :",font=('arial',12,'bold'),padx=2,pady=6)
+        lblName=Label(showDataFrame,text="Name          :",font=('arial',12,'bold'),padx=2,pady=4)
         lblName.grid(row=0,column=0,sticky='w')
         
-        name=Label(showDataFrame,text=row[0],font=('arial',12,'bold'),padx=2,pady=6)
+        name=Label(showDataFrame,text=row[0],font=('arial',12,'bold'),padx=2,pady=4)
         name.grid(row=0,column=1,sticky='w')
         
-        lblGender=Label(showDataFrame,text="Gender       :",font=('arial',12,'bold'),padx=2,pady=6)
+        lblGender=Label(showDataFrame,text="Gender       :",font=('arial',12,'bold'),padx=2,pady=4)
         lblGender.grid(row=1,column=0,sticky='w')
         
-        gender=Label(showDataFrame,text=row[1],font=('arial',12,'bold'),padx=2,pady=6)
+        gender=Label(showDataFrame,text=row[1],font=('arial',12,'bold'),padx=2,pady=4)
         gender.grid(row=1,column=1,sticky='w')
         
-        lblemail=Label(showDataFrame,text="Email           :",font=('arial',12,'bold'),padx=2,pady=6)
+        lblemail=Label(showDataFrame,text="Email           :",font=('arial',12,'bold'),padx=2,pady=4)
         lblemail.grid(row=2,column=0,sticky='w')
         
-        email=Label(showDataFrame,text=row[2],font=('arial',12,'bold'),padx=2,pady=6)
+        email=Label(showDataFrame,text=row[2],font=('arial',12,'bold'),padx=2,pady=4)
         email.grid(row=2,column=1)
         
-        lblNationality=Label(showDataFrame,text="Nationality :",font=('arial',12,'bold'),padx=2,pady=6)
+        lblNationality=Label(showDataFrame,text="Nationality :",font=('arial',12,'bold'),padx=2,pady=4)
         lblNationality.grid(row=3,column=0,sticky='w')
         
-        nationality=Label(showDataFrame,text=row[3],font=('arial',12,'bold'),padx=2,pady=6)
+        nationality=Label(showDataFrame,text=row[3],font=('arial',12,'bold'),padx=2,pady=4)
         nationality.grid(row=3,column=1,sticky='w')
         
-        lblAddress=Label(showDataFrame,text="Address     :",font=('arial',12,'bold'),padx=2,pady=6)
+        lblAddress=Label(showDataFrame,text="Address     :",font=('arial',12,'bold'),padx=2,pady=4)
         lblAddress.grid(row=4,column=0,sticky='w')
         
-        address=Label(showDataFrame,text=row[4],font=('arial',12,'bold'),padx=2,pady=6)
+        address=Label(showDataFrame,text=row[4],font=('arial',12,'bold'),padx=2,pady=4)
         address.grid(row=4,column=1,sticky='w')
         
-        lblAddress=Label(showDataFrame,text="Contact     :",font=('arial',12,'bold'),padx=2,pady=6)
-        lblAddress.grid(row=5,column=0,sticky='w')
+        lblcontact=Label(showDataFrame,text="Contact     :",font=('arial',12,'bold'),padx=2,pady=4)
+        lblcontact.grid(row=5,column=0,sticky='w')
         
-        address=Label(showDataFrame,text=row[5],font=('arial',12,'bold'),padx=2,pady=6)
-        address.grid(row=5,column=1,sticky='w')
+        contact=Label(showDataFrame,text=row[5],font=('arial',12,'bold'),padx=2,pady=4)
+        contact.grid(row=5,column=1,sticky='w')
         
         
   def addData(self):
@@ -344,7 +351,7 @@ class RoomBooking:
     self.check_in.set("")
     self.check_out.set("")
     self.availableRoom.set(str(random.randint(1,50)))
-    self.meal.set("")
+   # self.meal.set("")
     self.NoOfDays.set("")
     self.paidTax.set("")
     self.subTotal.set("")
@@ -369,17 +376,44 @@ class RoomBooking:
               messagebox.showerror("Error","No such data found",parent=self.root)
         except Exception as es:
             messagebox.showerror("Error",f"Some thing went wrong:{str(es)}",parent=self.root)
-      
+  
+  def totalBill(self):
+    inDate=self.check_in.get()
+    outDate=self.check_out.get()
+    inDate=datetime.strptime(inDate,"%d/%m/%Y")
+    outDate=datetime.strptime(outDate,"%d/%m/%Y")
+    self.NoOfDays.set(str(abs(outDate-inDate).days))
+    if self.roomType.get()=="Single":
+        self.subTotal.set(str('%.2f'%(float(self.NoOfDays.get())*1000)))
+        self.paidTax.set(str('%.2f'%(float(self.subTotal.get())*0.1)))
+    elif self.roomType.get()=="Double":
+        self.subTotal.set(str('%.2f'%(float(self.NoOfDays.get())*2000)))
+        self.paidTax.set(str('%.2f'%(float(self.subTotal.get())*0.1)))
+    elif self.roomType.get()=="Luxury":
+        self.subTotal.set(str('%.2f'%(float(self.NoOfDays.get())*3000)))
+        self.paidTax.set(str('%.2f'%(float(self.subTotal.get())*0.1)))
+    if self.meal.get()=="Breakfast":
+        self.subTotal.set(str('%.2f'%(float(self.subTotal.get())+float(self.NoOfDays.get())*100)))
+        self.paidTax.set(str('%.2f'%(float(self.paidTax.get())+(float(self.subTotal.get())*0.05))))
+    elif self.meal.get()=="Lunch":
+        self.subTotal.set(str('%.2f'%(float(self.subTotal.get())+float(self.NoOfDays.get())*200)))
+        self.paidTax.set(str('%.2f'%(float(self.paidTax.get())+(float(self.subTotal.get())*0.05))))
+    elif self.meal.get()=="Dinner":
+        self.subTotal.set(str('%.2f'%(float(self.subTotal.get())+float(self.NoOfDays.get())*200)))
+        self.paidTax.set(str('%.2f'%(float(self.paidTax.get())+(float(self.subTotal.get())*0.05))))
+    
+    self.totalCost.set(str('%.2f'%(float(self.subTotal.get())+float(self.paidTax.get()))))
           
     
     
     
 
         
-if __name__=="__main__":
-    root=Tk()
-    obj=RoomBooking(root)
-    root.mainloop()
+# if __name__=="__main__":
+#     root=Tk()
+#     obj=RoomBooking(root)
+#     obj.displayAll()
+#     root.mainloop()
 
     
     
