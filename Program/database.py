@@ -1,6 +1,5 @@
 #import mysql.connector
 import sqlite3
-
 class customerDatabase:
     def __init__(self,db):
        # self.con=mysql.connector.connect(host="localhost",user='root',password="Ramana30@")
@@ -21,7 +20,7 @@ class customerDatabase:
         """
         self.cur.execute(sql)
         self.con.commit()
-
+        
         
     def insert(self,ref,name,gender,mobile,email,postcode,nationality,id,idNumber,address):
         sql = "insert into Customer values (?,?,?,?,?,?,?,?,?,?)"
@@ -48,6 +47,7 @@ class customerDatabase:
             sql, (name,gender,mobile,email,postcode,nationality,id,idNumber,address,ref))
         self.con.commit()
         
+        
     # search a record
     
     def search(self, searchVal,searchText):
@@ -55,5 +55,67 @@ class customerDatabase:
         self.cur.execute(sql)
         rows = self.cur.fetchall()
         return rows
+    
+    def fetchData(self,contact):
+        self.cur.execute("SELECT name,gender,email,nationality,address,mobile from Customer where mobile=?",(contact,))
+        rows = self.cur.fetchone()
+        return rows
+    
+
+class roomDatabase:
+    def __init__(self,db):
+       # self.con=mysql.connector.connect(host="localhost",user='root',password="Ramana30@")
+        self.con = sqlite3.connect(db)
+        self.cur = self.con.cursor()
+        sql = """
+        CREATE TABLE IF NOT EXISTS Room(
+            contact text Primary Key,
+            checkIn text,
+            checkOut text,
+            roomType text,
+            RoomAvailable text,
+            meal text,
+            noOfDays text
+            )
+
+        """
+        self.cur.execute(sql)
+        self.con.commit()
+        
+        
+    def insert(self,contact,checkIn,checkOut,roomType,RoomAvailable,meal,noOfDays,):
+        sql = "insert into Room values (?,?,?,?,?,?,?)"
+        self.cur.execute(
+            sql, (contact,checkIn,checkOut,roomType,RoomAvailable,meal,noOfDays))
+        self.con.commit()
+
+    # fetch all data form db
+    def fetch(self):
+        self.cur.execute("SELECT * from Room")
+        rows = self.cur.fetchall()
+      #  print(rows)
+        return rows
+
+    # delete a record
+    def remove(self, contact):
+        # for tupple if single element put comma after element
+        self.cur.execute("delete from Room where contact=?", (contact,))
+
+    # update a record
+    def update(self,contact,checkIn,checkOut,roomType,RoomAvailable,meal,noOfDays):
+        sql = "update Room set checkIn=?,checkOut=?,roomType=?, RoomAvailable=?,meal=?, noOfDays=? where contact=?"
+        self.cur.execute(
+            sql, (checkIn,checkOut,roomType,RoomAvailable,meal,noOfDays,contact))
+        self.con.commit()
+        
+        
+    # search a record
+    
+    def search(self, searchVal,searchText):
+        sql = "select * from Room where "+str(searchVal)+" LIKE '%"+str(searchText)+"%'"
+        self.cur.execute(sql)
+        rows = self.cur.fetchall()
+        return rows
+
     
         
