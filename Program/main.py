@@ -106,7 +106,7 @@ class hotelManagementSystem:
         self.newWindow.geometry("+%d+%d" % (232,188)) 
         #self.newWindow.grab_set()
           
-if __name__=="__main__":
-    root=Tk()
-    obj=hotelManagementSystem(root)
-    root.mainloop()
+# if __name__=="__main__":
+#     root=Tk()
+#     obj=hotelManagementSystem(root)
+#     root.mainloop()
