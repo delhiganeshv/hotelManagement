@@ -9,7 +9,7 @@ from datetime import datetime
 
 
 customerDB=customerDatabase("Customer.db") 
-roomDB=roomDatabase("Room.db")
+roomDB=roomBookingDatabase("RoomBooking.db")
 
 
 class RoomBooking:
@@ -73,14 +73,14 @@ class RoomBooking:
     check_inLabel=Label(labelFrameLeft,text="check_in Date:",font=('times new roman',12,"bold"),padx=2,pady=6)
     check_inLabel.grid(row=1,column=0,sticky='w')
     
-    check_inEntry=DateEntry(labelFrameLeft,selectmode='day',date_pattern='dd/mm/yyyy',state='readonly',textvariable=self.check_in,width=23,font=('times new roman',13,"bold"))
+    check_inEntry=DateEntry(labelFrameLeft,selectmode='day',date_pattern='dd/mm/yyyy',state='readonly',textvariable=self.check_in,width=21,font=('times new roman',13,"bold"))
     check_inEntry.grid(row=1,column=1,sticky='w')
     
     #check out date
     check_outLabel=Label(labelFrameLeft,text="check_out Date:",font=('times new roman',12,"bold"),padx=2,pady=6)
     check_outLabel.grid(row=2,column=0,sticky='w')
     
-    check_outEntry=DateEntry(labelFrameLeft,selectmode='day',date_pattern='dd/mm/yyyy',state='readonly',textvariable=self.check_out,width=23,font=('times new roman',13,"bold"))
+    check_outEntry=DateEntry(labelFrameLeft,selectmode='day',date_pattern='dd/mm/yyyy',state='readonly',textvariable=self.check_out,width=21,font=('times new roman',13,"bold"))
     check_outEntry.grid(row=2,column=1,sticky='w')
     
     

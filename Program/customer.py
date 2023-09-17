@@ -5,7 +5,7 @@ from random import *
 from tkinter import messagebox
 from database import customerDatabase
 
-db=customerDatabase("Customer.db") 
+db=customerDatabase("CustomerData.db") 
 
 
 

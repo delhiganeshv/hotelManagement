@@ -63,7 +63,7 @@ class customerDatabase:
         return rows
     
 
-class roomDatabase:
+class roomBookingDatabase:
     def __init__(self,db):
        # self.con=mysql.connector.connect(host="localhost",user='root',password="Ramana30@")
         self.con = sqlite3.connect(db)
@@ -115,6 +115,60 @@ class roomDatabase:
     
     def search(self, searchVal,searchText):
         sql = "select * from Room where "+str(searchVal)+" LIKE '%"+str(searchText)+"%'"
+        self.cur.execute(sql)
+        rows = self.cur.fetchall()
+        return rows
+
+    
+
+class roomDatabase:
+    def __init__(self,db):
+       # self.con=mysql.connector.connect(host="localhost",user='root',password="Ramana30@")
+        self.con = sqlite3.connect(db)
+        self.cur = self.con.cursor()
+        sql = """
+        CREATE TABLE IF NOT EXISTS Room(
+            floor text,
+            roomNo text Primary Key,
+            roomType text
+            )
+
+        """
+        self.cur.execute(sql)
+        self.con.commit()
+        
+        
+    def insert(self,floor,roomNo,roomType):
+        sql = "insert into Room values (?,?,?)"
+        self.cur.execute(
+            sql, (floor,roomNo,roomType))
+        self.con.commit()
+
+    # fetch all data form db
+    def fetch(self):
+        self.cur.execute("SELECT * from Room")
+        rows = self.cur.fetchall()
+      #  print(rows)
+        return rows
+
+    # delete a record
+    def remove(self, roomNo):
+        # for tupple if single element put comma after element
+        self.cur.execute("delete from Room where roomNo=?", (roomNo,))
+        self.con.commit()
+
+    # update a record
+    def update(self,floor,roomNo,roomType):
+        sql = "update Room set floor=?,roomType=? where roomNo=?"
+        self.cur.execute(
+            sql, (floor,roomType,roomNo))
+        self.con.commit()
+        
+        
+    # search a record
+    
+    def search(self, searchVal):
+        sql = "select * from Room where roomNo LIKE '%"+str(searchVal)+"%'"
         self.cur.execute(sql)
         rows = self.cur.fetchall()
         return rows
