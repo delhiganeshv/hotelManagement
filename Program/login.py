@@ -149,9 +149,10 @@ class LoginWindow:
                 f"Welcome {self.username.get()}\nYour Password:{self.password.get()}",
                 parent=self.root,
             )
-            self.newWindow = Toplevel(self.root)
+            self.root.destroy()
+            self.newWindow = Tk()
             self.app = hotelManagementSystem(self.newWindow)
-            self.newWindow.grab_set()
+            self.newWindow.mainloop()
 
 
 if __name__ == "__main__":

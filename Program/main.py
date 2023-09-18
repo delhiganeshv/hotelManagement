@@ -183,9 +183,10 @@ class hotelManagementSystem:
 
     def logout(self):
         self.root.destroy()
+    
 
 
-if __name__ == "__main__":
-    root = Tk()
-    obj = hotelManagementSystem(root)
-    root.mainloop()
+# if __name__ == "__main__":
+#     root = Tk()
+#     obj = hotelManagementSystem(root)
+#     root.mainloop()
