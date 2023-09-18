@@ -1,8 +1,10 @@
-#import mysql.connector
+# import mysql.connector
 import sqlite3
+
+
 class customerDatabase:
-    def __init__(self,db):
-       # self.con=mysql.connector.connect(host="localhost",user='root',password="Ramana30@")
+    def __init__(self, db):
+        # self.con=mysql.connector.connect(host="localhost",user='root',password="Ramana30@")
         self.con = sqlite3.connect(db)
         self.cur = self.con.cursor()
         sql = """
@@ -20,19 +22,43 @@ class customerDatabase:
         """
         self.cur.execute(sql)
         self.con.commit()
-        
-        
-    def insert(self,ref,name,gender,mobile,email,postcode,nationality,id,idNumber,address):
+
+    def insert(
+        self,
+        ref,
+        name,
+        gender,
+        mobile,
+        email,
+        postcode,
+        nationality,
+        id,
+        idNumber,
+        address,
+    ):
         sql = "insert into Customer values (?,?,?,?,?,?,?,?,?,?)"
         self.cur.execute(
-            sql, (ref,name,gender,mobile,email,postcode,nationality,id,idNumber,address))
+            sql,
+            (
+                ref,
+                name,
+                gender,
+                mobile,
+                email,
+                postcode,
+                nationality,
+                id,
+                idNumber,
+                address,
+            ),
+        )
         self.con.commit()
 
     # fetch all data form db
     def fetch(self):
         self.cur.execute("SELECT * from Customer")
         rows = self.cur.fetchall()
-      #  print(rows)
+        #  print(rows)
         return rows
 
     # delete a record
@@ -42,30 +68,63 @@ class customerDatabase:
         self.con.commit()
 
     # update a record
-    def update(self,ref,name,gender,mobile,email,postcode,nationality,id,idNumber,address):
+    def update(
+        self,
+        ref,
+        name,
+        gender,
+        mobile,
+        email,
+        postcode,
+        nationality,
+        id,
+        idNumber,
+        address,
+    ):
         sql = "update Customer set name=?, gender=?,mobile=?, email=?, postcode=?, nationality=?,id=?,idNumber=?, address=? where ref=?"
         self.cur.execute(
-            sql, (name,gender,mobile,email,postcode,nationality,id,idNumber,address,ref))
+            sql,
+            (
+                name,
+                gender,
+                mobile,
+                email,
+                postcode,
+                nationality,
+                id,
+                idNumber,
+                address,
+                ref,
+            ),
+        )
         self.con.commit()
-        
-        
+
     # search a record
-    
-    def search(self, searchVal,searchText):
-        sql = "select * from Customer where "+str(searchVal)+" LIKE '%"+str(searchText)+"%'"
+
+    def search(self, searchVal, searchText):
+        sql = (
+            "select * from Customer where "
+            + str(searchVal)
+            + " LIKE '%"
+            + str(searchText)
+            + "%'"
+        )
         self.cur.execute(sql)
         rows = self.cur.fetchall()
         return rows
-    
-    def fetchData(self,contact):
-        self.cur.execute("SELECT name,gender,email,nationality,address,mobile from Customer where mobile=?",(contact,))
+
+    def fetchData(self, contact):
+        self.cur.execute(
+            "SELECT name,gender,email,nationality,address,mobile from Customer where mobile=?",
+            (contact,),
+        )
         rows = self.cur.fetchone()
         return rows
-    
+
 
 class roomBookingDatabase:
-    def __init__(self,db):
-       # self.con=mysql.connector.connect(host="localhost",user='root',password="Ramana30@")
+    def __init__(self, db):
+        # self.con=mysql.connector.connect(host="localhost",user='root',password="Ramana30@")
         self.con = sqlite3.connect(db)
         self.cur = self.con.cursor()
         sql = """
@@ -82,19 +141,28 @@ class roomBookingDatabase:
         """
         self.cur.execute(sql)
         self.con.commit()
-        
-        
-    def insert(self,contact,checkIn,checkOut,roomType,RoomAvailable,meal,noOfDays,):
+
+    def insert(
+        self,
+        contact,
+        checkIn,
+        checkOut,
+        roomType,
+        RoomAvailable,
+        meal,
+        noOfDays,
+    ):
         sql = "insert into Room values (?,?,?,?,?,?,?)"
         self.cur.execute(
-            sql, (contact,checkIn,checkOut,roomType,RoomAvailable,meal,noOfDays))
+            sql, (contact, checkIn, checkOut, roomType, RoomAvailable, meal, noOfDays)
+        )
         self.con.commit()
 
     # fetch all data form db
     def fetch(self):
         self.cur.execute("SELECT * from Room")
         rows = self.cur.fetchall()
-      #  print(rows)
+        #  print(rows)
         return rows
 
     # delete a record
@@ -104,26 +172,33 @@ class roomBookingDatabase:
         self.con.commit()
 
     # update a record
-    def update(self,contact,checkIn,checkOut,roomType,RoomAvailable,meal,noOfDays):
+    def update(
+        self, contact, checkIn, checkOut, roomType, RoomAvailable, meal, noOfDays
+    ):
         sql = "update Room set checkIn=?,checkOut=?,roomType=?, RoomAvailable=?,meal=?, noOfDays=? where contact=?"
         self.cur.execute(
-            sql, (checkIn,checkOut,roomType,RoomAvailable,meal,noOfDays,contact))
+            sql, (checkIn, checkOut, roomType, RoomAvailable, meal, noOfDays, contact)
+        )
         self.con.commit()
-        
-        
+
     # search a record
-    
-    def search(self, searchVal,searchText):
-        sql = "select * from Room where "+str(searchVal)+" LIKE '%"+str(searchText)+"%'"
+
+    def search(self, searchVal, searchText):
+        sql = (
+            "select * from Room where "
+            + str(searchVal)
+            + " LIKE '%"
+            + str(searchText)
+            + "%'"
+        )
         self.cur.execute(sql)
         rows = self.cur.fetchall()
         return rows
 
-    
 
 class roomDatabase:
-    def __init__(self,db):
-       # self.con=mysql.connector.connect(host="localhost",user='root',password="Ramana30@")
+    def __init__(self, db):
+        # self.con=mysql.connector.connect(host="localhost",user='root',password="Ramana30@")
         self.con = sqlite3.connect(db)
         self.cur = self.con.cursor()
         sql = """
@@ -136,19 +211,17 @@ class roomDatabase:
         """
         self.cur.execute(sql)
         self.con.commit()
-        
-        
-    def insert(self,floor,roomNo,roomType):
+
+    def insert(self, floor, roomNo, roomType):
         sql = "insert into Room values (?,?,?)"
-        self.cur.execute(
-            sql, (floor,roomNo,roomType))
+        self.cur.execute(sql, (floor, roomNo, roomType))
         self.con.commit()
 
     # fetch all data form db
     def fetch(self):
         self.cur.execute("SELECT * from Room")
         rows = self.cur.fetchall()
-      #  print(rows)
+        #  print(rows)
         return rows
 
     # delete a record
@@ -158,20 +231,15 @@ class roomDatabase:
         self.con.commit()
 
     # update a record
-    def update(self,floor,roomNo,roomType):
+    def update(self, floor, roomNo, roomType):
         sql = "update Room set floor=?,roomType=? where roomNo=?"
-        self.cur.execute(
-            sql, (floor,roomType,roomNo))
+        self.cur.execute(sql, (floor, roomType, roomNo))
         self.con.commit()
-        
-        
+
     # search a record
-    
+
     def search(self, searchVal):
-        sql = "select * from Room where roomNo LIKE '%"+str(searchVal)+"%'"
+        sql = "select * from Room where roomNo LIKE '%" + str(searchVal) + "%'"
         self.cur.execute(sql)
         rows = self.cur.fetchall()
         return rows
-
-    
-        
